@@ -1,0 +1,9 @@
+{
+  "url": "https://jsonplaceholder.typicode.com",
+  "urlPost": "https://jsonplaceholder.typicode.com/posts",
+  "testData_Users": "src/test/resources/testGetData.json",
+  "jsonPathTest5": "src/test/resources/testUserID5.json",
+  "idNumber": 5,
+  "dataResults": "src/test/resources/dataResults.json",
+  "testData_User99": "src/test/resources/TestData_User99.json"
+}

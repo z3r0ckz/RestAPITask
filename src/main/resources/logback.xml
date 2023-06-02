@@ -1,0 +1,9 @@
+<configuration>
+    <!-- Otros elementos de configuración -->
+
+    <root level="info"> <!-- Cambia el nivel root a "info" o el nivel deseado -->
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Otros elementos de configuración -->
+</configuration>
