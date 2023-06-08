@@ -8,14 +8,11 @@ import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import tests.MyLogger;
 import java.util.Collections;
 import java.util.List;
 
-public class RestApi_Utils {
+public class RestApiUtils {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static <T> List<T> getList(String json, Class<T> dtoClass) {
@@ -34,41 +31,28 @@ public class RestApi_Utils {
             throw new RuntimeException(e);
         }
     }
-
-    public static <T> List<T> getListFromFile(String filePath, Class<T> dtoClass) {
-        if (filePath == null || filePath.isEmpty()) {
-            throw new IllegalArgumentException("File path is null or empty");
-        }
+    public static <T> T getObject(String responseBody, Class<T> clazz) {
         try {
-            File file = new File(filePath);
-            if (file.exists()) {
-                if (file.isDirectory()) {
-                    throw new IllegalArgumentException("File path points to a directory, expected a file");
-                } else {
-                    JavaType listType = objectMapper.getTypeFactory().constructCollectionType(List.class, dtoClass);
-                    return objectMapper.readValue(file, listType);
-                }
-            } else {
-                throw new FileNotFoundException("File not found at: " + filePath);
-            }
-        } catch (IllegalArgumentException | IOException e) {
-            throw new RuntimeException(e);
+            return objectMapper.readValue(responseBody, clazz);
+        } catch (Exception e) {
+            MyLogger.error("The Stack Trace error is: "+e);
+            return null;
         }
     }
-
     //------------------ Simple HTTP Get
     public static HttpResponse<JsonNode> get(String route) {
         return Unirest.get(route)
                 .header("accept", "application/json")
                 .asJson();
     }
-    //-------------- Simple post
-    public static HttpResponse<JsonNode> post(String route, JSONObject requestBody)  {
-        Unirest.post(route)
-                .header("accept", "application/json")
+    //-------------- Simple HTTP post
+    public static HttpResponse<JsonNode> post(String route, JSONObject requestBody) {
+
+        return Unirest.post(route)
+                .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
-                .body(requestBody)
+                .body(requestBody.toString())
                 .asJson();
-        return null;
     }
+
 }
